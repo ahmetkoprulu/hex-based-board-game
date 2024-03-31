@@ -48,6 +48,11 @@ public static class HexHelpers
         }
     }
 
+    public static Vector3 OffsetToCube(Vector2 offset, HexOrientation orientation)
+    {
+        return OffsetToCube((int)offset.x, (int)offset.y, orientation);
+    }
+
     public static Vector2Int CubeToAxial(Vector3 cube)
     {
         return new Vector2Int((int)cube.x, (int)cube.y);

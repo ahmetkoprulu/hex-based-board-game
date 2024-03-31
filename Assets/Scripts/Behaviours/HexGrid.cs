@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class HexGrid : MonoBehaviour
@@ -9,7 +10,6 @@ public class HexGrid : MonoBehaviour
     [field: SerializeField] public int Width { get; set; }
     [field: SerializeField] public int Height { get; set; }
     [field: SerializeField] public float HexSize { get; set; }
-    [field: SerializeField] public GameObject HexPrefab { get; set; }
 
     /// <summary>
     /// Callback to draw gizmos that are pickable and always drawn.

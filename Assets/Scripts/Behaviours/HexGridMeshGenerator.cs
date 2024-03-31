@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter)), RequireComponent(typeof(MeshRenderer)), RequireComponent(typeof(MeshCollider))]
+[RequireComponent(typeof(MapGenerator)), RequireComponent(typeof(MeshFilter)), RequireComponent(typeof(MeshRenderer)), RequireComponent(typeof(MeshCollider))]
 public class HexGridMeshGenerator : MonoBehaviour
 {
     [field: SerializeField] public LayerMask GridLayer { get; set; }
     [field: SerializeField] public HexGrid HexGrid { get; set; }
+    public MapGenerator MapGenerator { get; private set; }
 
     /// <summary>
     /// Awake is called when the script instance is being loaded.
@@ -14,7 +15,7 @@ public class HexGridMeshGenerator : MonoBehaviour
     private void Awake()
     {
         if (HexGrid == null) HexGrid = GetComponent<HexGrid>();
-        if (HexGrid == null) Debug.LogError("HexGridMeshGenerator could not find a HexGrid component in its parent or itself.");
+        if (MapGenerator == null) MapGenerator = GetComponent<MapGenerator>();
     }
 
     /// <summary>
