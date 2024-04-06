@@ -15,5 +15,10 @@ public class HexCellGeneratorEditor : Editor
         {
             mapGenerator.Generate();
         }
+
+        if (GUILayout.Button("Clear"))
+        {
+            mapGenerator.ClearHexCells();
+        }
     }
 }

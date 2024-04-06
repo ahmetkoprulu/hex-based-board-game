@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,25 +17,6 @@ public class HexGridMeshGenerator : MonoBehaviour
     {
         if (HexGrid == null) HexGrid = GetComponent<HexGrid>();
         if (MapGenerator == null) MapGenerator = GetComponent<MapGenerator>();
-    }
-
-    /// <summary>
-    /// This function is called when the object becomes enabled and active.
-    /// </summary>
-    void OnEnable()
-    {
-        MouseController.Instance.OnLeftMouseClick += OnLeftMouseClick;
-        MouseController.Instance.OnRightMouseClick += OnRightMouseClick;
-    }
-
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
-    void OnDisable()
-    {
-        MouseController.Instance.OnLeftMouseClick -= OnLeftMouseClick;
-        MouseController.Instance.OnRightMouseClick -= OnRightMouseClick;
-
     }
 
     public void CreateHexMesh()
@@ -116,23 +98,5 @@ public class HexGridMeshGenerator : MonoBehaviour
         }
 
         return 0;
-    }
-
-    private void OnLeftMouseClick(RaycastHit hit)
-    {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
-        Debug.Log($"Local X: {localX}, Local Z: {localZ}");
-    }
-
-    private void OnRightMouseClick(RaycastHit hit)
-    {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
-
-        Vector2 localtion = HexHelpers.CoordinateToOffset(localX, localZ, HexGrid.HexSize, HexGrid.Orientation);
-        var center = HexHelpers.GetCenter(HexGrid.HexSize, (int)localtion.x, (int)localtion.y, HexGrid.Orientation);
-        Debug.Log($"Localtion: {localtion}, Center: {center}");
-        // Instantiate(explosionTest, center, Quaternion.identity);
     }
 }

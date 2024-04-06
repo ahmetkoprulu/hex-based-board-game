@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -6094002618242951305}
   - component: {fileID: -6763399128781149859}
   - component: {fileID: 7440605482831131185}
+  - component: {fileID: 8015186620528088901}
   m_Layer: 0
   m_Name: Hex Base
   m_TagString: Untagged
@@ -447,3 +448,24 @@ MonoBehaviour:
   m_SkinMeshRef: {fileID: 0}
   m_OriginalMeshObject: {fileID: 4300000, guid: 3eda6ff654548074cb3ef4cf4e614848, type: 2}
   m_Mode: 0
+--- !u!95 &8015186620528088901
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7812261154497519829}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7ea5832d7d1ca2b47a976a71c03ff36e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -29,6 +29,7 @@ public class HexCellGenerator : MonoBehaviour
         ClearHexCells();
 
         cells = GenerateHexCells(Grid, terrainMap);
+        Grid.SetCells(TransformTo2DArray(cells, Grid.Width, Grid.Height));
         StartCoroutine(InstantiateCells(cells));
     }
 
@@ -50,7 +51,29 @@ public class HexCellGenerator : MonoBehaviour
             .SelectMany(x => x)
             .ToList();
 
-    private void ClearHexCells()
+    public HexCell[,] TransformTo2DArray(List<HexCell> hexCells, int width, int height)
+    {
+        HexCell[,] hexCellArray = new HexCell[width, height];
+        for (int i = 0; i < hexCells.Count; i++)
+        {
+            int x = (int)hexCells[i].OffsetCoordinates.x;
+            int y = (int)hexCells[i].OffsetCoordinates.y;
+            hexCellArray[x, y] = hexCells[i];
+        }
+
+        for (int i = 0; i < hexCells.Count; i++)
+        {
+            int x = (int)hexCells[i].OffsetCoordinates.x;
+            int y = (int)hexCells[i].OffsetCoordinates.y;
+            var nCoordinates = HexHelpers.GetNeighboursCoordinates(x, y);
+
+            hexCellArray[x, y].SetNeighbours(nCoordinates.Select(x => hexCellArray[(int)x.x, (int)x.y]).ToList());
+        }
+
+        return hexCellArray;
+    }
+
+    public void ClearHexCells()
     {
         for (int i = 0; i < cells.Count; i++)
         {

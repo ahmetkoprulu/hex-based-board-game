@@ -9,9 +9,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -6094002618242951305, guid: 25fbb6b7be9951149826459bff92663c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6094002618242951305, guid: 25fbb6b7be9951149826459bff92663c, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4c216a70af6ef22419431af877580ddb, type: 2}
+    - target: {fileID: -6094002618242951305, guid: 25fbb6b7be9951149826459bff92663c, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8e6294cec10612c4f855250b2a864638, type: 2}
     - target: {fileID: 2679405445543915946, guid: 25fbb6b7be9951149826459bff92663c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.228736
@@ -802,7 +810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7812261154497519829, guid: 25fbb6b7be9951149826459bff92663c, type: 3}
       propertyPath: m_Name
-      value: Hex Base Ocean
+      value: Hex Ocean
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

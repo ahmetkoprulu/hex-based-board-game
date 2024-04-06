@@ -140,4 +140,24 @@ public static class HexHelpers
     {
         return CubeToOffset(AxialToCube(CoordinateToAxial(x, z, hexSize, orientation)), orientation);
     }
+
+    public static List<Vector2> GetNeighboursCoordinates(int x, int y, int width, int height)
+    {
+        var neighbours = new List<Vector2>();
+        var startX = x - 1;
+        var startY = y - 1;
+
+        for (var i = startX; i < startX + 3; i++)
+        {
+            for (var j = startY; j < startY + 3; j++)
+            {
+                if ((i == x && j == y) || IsExceedingGrid(x, y, width, height)) continue;
+                neighbours.Add(new Vector2(i, j));
+            }
+        }
+
+        return neighbours;
+    }
+
+    public static bool IsExceedingGrid(int x, int y, int width, int height) => x < 0 || y < 0 || x >= width || y >= height;
 }

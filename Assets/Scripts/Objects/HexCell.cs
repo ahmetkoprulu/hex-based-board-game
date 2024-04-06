@@ -45,7 +45,7 @@ public class HexCell
             Quaternion.identity,
             Grid.transform
             );
-        terrain.gameObject.layer = LayerMask.NameToLayer("Grid");
+        // terrain.gameObject.layer = LayerMask.NameToLayer("Grid");
 
         //TODO: Adjust the size of the prefab to the size of the grid cell
 
@@ -58,10 +58,7 @@ public class HexCell
         terrain.Rotate(new Vector3(0, randomRotation * 60, 0));
     }
 
-    public void SetNeighbours(List<HexCell> neighbours)
-    {
-        Neighbours = neighbours;
-    }
+    public void SetNeighbours(List<HexCell> neighbours) => Neighbours = neighbours;
 
     public void ClearTerrain()
     {
@@ -83,6 +80,25 @@ public class HexCell
         };
 
         return cell;
+    }
+
+    public void OnSelected()
+    {
+        terrain.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+        var renderer = terrain.GetComponent<Renderer>();
+        renderer.materials[1].SetFloat("_Scale", 1.1f);
+    }
+
+    public void OnDeSelected()
+    {
+        terrain.transform.localScale = new Vector3(1, 1, 1);
+        var renderer = terrain.GetComponent<Renderer>();
+        renderer.materials[1].SetFloat("_Scale", 1f);
+    }
+
+    public bool Equals(HexCell other)
+    {
+        return OffsetCoordinates == other.OffsetCoordinates;
     }
 }
 
