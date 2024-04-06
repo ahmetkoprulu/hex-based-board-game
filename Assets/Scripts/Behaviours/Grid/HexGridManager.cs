@@ -39,7 +39,7 @@ public class HexGridManager : MonoBehaviour
 
     private void SelectCell(int x, int y)
     {
-        var cell = Grid.Cells[x, y];
+        var cell = Grid.OffsetGrid[x, y];
         SelectedCell?.OnDeSelected();
 
         if (SelectedCell?.Equals(cell) ?? false)

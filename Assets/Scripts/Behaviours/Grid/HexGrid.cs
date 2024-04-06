@@ -11,31 +11,13 @@ public class HexGrid : MonoBehaviour
     [field: SerializeField] public int Height { get; set; }
     [field: SerializeField] public float HexSize { get; set; }
 
-    public HexCell[,] Cells { get; private set; }
+    public HexCell[,] OffsetGrid { get; private set; }
+    public HexCell[,,] AxialGrid { get; private set; }
 
-    public void SetCells(HexCell[,] cells) => Cells = cells;
+    public void SetOffsetGrid(HexCell[,] grid) => OffsetGrid = grid;
 
-    /// <summary>
-    /// This function is called when the object becomes enabled and active.
-    /// </summary>
-    void OnEnable()
-    {
-        MouseController.Instance.OnLeftMouseClick += OnLeftMouseClick;
-        MouseController.Instance.OnRightMouseClick += OnRightMouseClick;
-    }
+    public void SetAxialGrid(HexCell[,,] grid) => AxialGrid = grid;
 
-    /// <summary>
-    /// This function is called when the behaviour becomes disabled or inactive.
-    /// </summary>
-    void OnDisable()
-    {
-        MouseController.Instance.OnLeftMouseClick -= OnLeftMouseClick;
-        MouseController.Instance.OnRightMouseClick -= OnRightMouseClick;
-    }
-
-    /// <summary>
-    /// Callback to draw gizmos that are pickable and always drawn.
-    /// </summary>
     private void OnDrawGizmos()
     {
         for (int z = 0; z < Height; z++)
@@ -53,24 +35,6 @@ public class HexGrid : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void OnLeftMouseClick(RaycastHit hit)
-    {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
-        Debug.Log($"Local X: {localX}, Local Z: {localZ}");
-    }
-
-    private void OnRightMouseClick(RaycastHit hit)
-    {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
-
-        Vector2 localtion = HexHelpers.CoordinateToOffset(localX, localZ, HexSize, Orientation);
-        var center = HexHelpers.GetCenter(HexSize, (int)localtion.x, (int)localtion.y, Orientation);
-        Debug.Log($"Localtion: {localtion}, Center: {center}");
-        // Instantiate(explosionTest, center, Quaternion.identity);
     }
 }
 

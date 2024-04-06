@@ -53,8 +53,8 @@ public class HexCell
         {
             terrain.Rotate(new Vector3(0, 30, 0));
         }
-        //Temporary random rotation to make the terrain look more natural
-        int randomRotation = UnityEngine.Random.Range(0, 6);
+
+        int randomRotation = Random.Range(0, 6);
         terrain.Rotate(new Vector3(0, randomRotation * 60, 0));
     }
 
@@ -87,6 +87,16 @@ public class HexCell
         terrain.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
         var renderer = terrain.GetComponent<Renderer>();
         renderer.materials[1].SetFloat("_Scale", 1.1f);
+        renderer.materials[1].SetColor("_Color", Color.blue);
+
+        Neighbours.ForEach(x =>
+        {
+            x.terrain.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            var renderer = x.terrain.GetComponent<Renderer>();
+            renderer.materials[1].SetFloat("_Scale", 1.1f);
+            if (x.TerrainType.IsNotMoveable) renderer.materials[1].SetColor("_Color", Color.red);
+            else renderer.materials[1].SetColor("_Color", Color.green);
+        });
     }
 
     public void OnDeSelected()
@@ -94,6 +104,13 @@ public class HexCell
         terrain.transform.localScale = new Vector3(1, 1, 1);
         var renderer = terrain.GetComponent<Renderer>();
         renderer.materials[1].SetFloat("_Scale", 1f);
+
+        Neighbours.ForEach(x =>
+        {
+            x.terrain.transform.localScale = new Vector3(1, 1, 1);
+            var renderer = x.terrain.GetComponent<Renderer>();
+            renderer.materials[1].SetFloat("_Scale", 1f);
+        });
     }
 
     public bool Equals(HexCell other)
