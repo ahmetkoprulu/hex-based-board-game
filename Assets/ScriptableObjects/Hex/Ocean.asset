@@ -18,3 +18,4 @@ MonoBehaviour:
   <Colour>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
   <Prefab>k__BackingField: {fileID: 2503040575985048380, guid: 609fb16783a7df84c80e5aa2b2f9f9ad, type: 3}
   <Icon>k__BackingField: {fileID: 0}
+  <IsNotMoveable>k__BackingField: 1

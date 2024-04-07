@@ -9,6 +9,8 @@ public static class HexHelpers
 {
     public static readonly Vector3[] Directions = { new(1, 0, -1), new(1, -1, 0), new(0, -1, 1), new(-1, 0, 1), new(-1, 1, 0), new(0, 1, -1) };
 
+    public static Vector3 GetDirection(int direction) => Directions[direction];
+
     public static float OuterRadius(float size) => size; // Width of the flat hexagon
 
     public static float InnerRadius(float size) => size * 0.866025404f; // sqrt(3) * size. Height of the flat hexagon
@@ -103,6 +105,21 @@ public static class HexHelpers
     }
 
     public static Vector2 CoordinateToOffset(float x, float z, float hexSize, HexOrientation orientation) => CubeToOffset(AxialToCube(CoordinateToAxial(x, z, hexSize, orientation)), orientation);
+
+    // Returns list of axial coordinates within a range of n from the start coordinate
+    public static List<Vector3> GetCoordinateRange(Vector3 center, int n)
+    {
+        var results = new List<Vector3>();
+        for (int q = -n; q <= n; q++)
+        {
+            int r1 = Mathf.Max(-n, -q - n);
+            int r2 = Mathf.Min(n, -q + n);
+
+            for (int r = r1; r <= r2; r++) results.Add(center + new Vector3(q, r, -q - r));
+        }
+
+        return results;
+    }
 
     public static List<Vector2> GetNeighboursCoordinates(int x, int y, HexOrientation orientation)
     {

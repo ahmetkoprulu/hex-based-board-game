@@ -48,7 +48,54 @@ public class HexGridManager : MonoBehaviour
             return;
         }
 
+        if (cell.TerrainType.IsNotMoveable)
+        {
+            SelectedCell = null;
+            return;
+        };
+
+        var available = FindReachableCoordinates(cell, 3, Grid.OffsetGrid.Cast<HexCell>().ToList());
+
+        // var range = HexHelpers.GetCoordinateRange(cell.CubeCoordinates, 2)
+        //     .Select(c => HexHelpers.CubeToOffset(c, Grid.Orientation))
+        //     .Where(c => !HexHelpers.IsExceedingGrid((int)c.x, (int)c.y, Grid.Width, Grid.Height))
+        //     .Select(x => Grid.OffsetGrid[(int)x.x, (int)x.y])
+        //     .ToList();
+
         SelectedCell = cell;
+        cell.SetReachableNeighbours(available);
         SelectedCell.OnSelected();
     }
+
+    public List<HexCell> FindReachableCoordinates(HexCell center, int steps, List<HexCell> range)
+    {
+        var blocked = range.Where(x => x.TerrainType.IsNotMoveable).ToList();
+        return BreadthFirstSearch(center, steps, blocked);
+    }
+
+    public List<HexCell> BreadthFirstSearch(HexCell origin, int steps, List<HexCell> blocked)
+    {
+        var results = new List<HexCell> { origin };
+        var fringes = new List<List<HexCell>>() { new List<HexCell> { origin } };
+
+        for (var k = 1; k < steps; k++)
+        {
+            fringes.Add(new List<HexCell>());
+            foreach (var coord in fringes[k - 1])
+            {
+                for (var direction = 0; direction < 6; direction++)
+                {
+                    var neighbour = coord.GetNeighbour(HexHelpers.Directions[direction]);
+                    if (!(blocked.Contains(neighbour) || results.Contains(neighbour)))
+                    {
+                        results.Add(neighbour);
+                        fringes[k].Add(neighbour);
+                    }
+                }
+            }
+        }
+
+        return results;
+    }
+
 }

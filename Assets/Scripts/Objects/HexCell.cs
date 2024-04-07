@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexCell
@@ -13,7 +14,8 @@ public class HexCell
     [field: SerializeField] public Vector2 OffsetCoordinates { get; set; }
     [field: SerializeField] public Vector3 CubeCoordinates { get; set; }
     [field: SerializeField] public Vector2 AxialCoordinates { get; set; }
-    [field: SerializeField] public List<HexCell> Neighbours { get; set; } = new();
+    public List<HexCell> Neighbours { get; set; } = new();
+    public List<HexCell> ReachableNeighbours { get; set; } = new();
 
     public HexCell SetCoordinates(Vector2 offsetCoordinates, HexOrientation orientation)
     {
@@ -30,6 +32,17 @@ public class HexCell
         TerrainType = terrainType;
         return this;
     }
+
+    public void SetNeighbours(List<HexCell> neighbours) => Neighbours = neighbours;
+
+    public HexCell? GetNeighbour(Vector3 direction)
+    {
+        var coord = CubeCoordinates + direction;
+        var neighbour = Neighbours.FirstOrDefault(x => x.CubeCoordinates == coord);
+        return neighbour;
+    }
+
+    public void SetReachableNeighbours(List<HexCell> neighbours) => ReachableNeighbours = neighbours;
 
     public void CreateTerrain()
     {
@@ -57,8 +70,6 @@ public class HexCell
         int randomRotation = Random.Range(0, 6);
         terrain.Rotate(new Vector3(0, randomRotation * 60, 0));
     }
-
-    public void SetNeighbours(List<HexCell> neighbours) => Neighbours = neighbours;
 
     public void ClearTerrain()
     {
@@ -89,7 +100,7 @@ public class HexCell
         renderer.materials[1].SetFloat("_Scale", 1.1f);
         renderer.materials[1].SetColor("_Color", Color.blue);
 
-        Neighbours.ForEach(x =>
+        ReachableNeighbours.ForEach(x =>
         {
             x.terrain.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
             var renderer = x.terrain.GetComponent<Renderer>();
@@ -105,7 +116,7 @@ public class HexCell
         var renderer = terrain.GetComponent<Renderer>();
         renderer.materials[1].SetFloat("_Scale", 1f);
 
-        Neighbours.ForEach(x =>
+        ReachableNeighbours.ForEach(x =>
         {
             x.terrain.transform.localScale = new Vector3(1, 1, 1);
             var renderer = x.terrain.GetComponent<Renderer>();
@@ -115,7 +126,7 @@ public class HexCell
 
     public bool Equals(HexCell other)
     {
-        return OffsetCoordinates == other.OffsetCoordinates;
+        return OffsetCoordinates == other.OffsetCoordinates || CubeCoordinates == other.CubeCoordinates || AxialCoordinates == other.AxialCoordinates;
     }
 }
 
