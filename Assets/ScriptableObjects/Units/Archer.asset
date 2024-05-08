@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309a15f16e147da4d8f6256512b8c672, type: 3}
+  m_Name: Archer
+  m_EditorClassIdentifier: 
+  id: 0
+  <Name>k__BackingField: Archer
+  <Description>k__BackingField: 
+  <Health>k__BackingField: 2
+  <Attack>k__BackingField: 3
+  <Defence>k__BackingField: 1
+  <Movement>k__BackingField: 2
+  <Range>k__BackingField: 2
+  <Canvas>k__BackingField: {fileID: 7305543880505244235, guid: e15c8b7a45d49f948be827684364e96e, type: 3}
+  <Prefab>k__BackingField: {fileID: 1815712081436675354, guid: 93ddf5fff26bcb642a6f1f94462963b2, type: 3}
+  <Icon>k__BackingField: {fileID: 0}

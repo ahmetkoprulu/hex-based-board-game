@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19529e702a4aef45a7f2e9fc3f01b5b, type: 3}
+  m_Name: Grass
+  m_EditorClassIdentifier: 
+  id: 0
+  <Name>k__BackingField: Grass
+  <Description>k__BackingField: Default Terrain Type
+  <Colour>k__BackingField: {r: 0.37507918, g: 0.6415094, b: 0.3721965, a: 0}
+  <Prefab>k__BackingField: {fileID: 7360584943320439267, guid: f68b4b5b7ab0f604d9f5c43397521db0, type: 3}
+  <Icon>k__BackingField: {fileID: 0}
+  <IsNotMoveable>k__BackingField: 0
