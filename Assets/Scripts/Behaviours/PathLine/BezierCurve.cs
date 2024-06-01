@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BezierCurve
 {
-    public Vector3[] Points;
+    public Node[] Points;
 
     public BezierCurve()
     {
-        Points = new Vector3[4];
+        Points = new Node[4];
     }
 
-    public BezierCurve(Vector3[] points)
+    public BezierCurve(Node[] points)
     {
         Points = points;
     }
@@ -20,7 +20,7 @@ public class BezierCurve
 
     public Vector3 EndPosition => Points[^1];
 
-    public Vector3 GetPoint(float t)
+    public Node GetPoint(float t)
     {
         t = Mathf.Clamp01(t);
         var time = 1 - t;
@@ -30,7 +30,7 @@ public class BezierCurve
                t * t * t * Points[3];
     }
 
-    public Vector3[] GetPoints(int segments)
+    public Node[] GetPoints(int segments)
     {
         return Enumerable
             .Range(1, segments)

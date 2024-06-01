@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,12 @@ public class HexGridManager : MonoBehaviour
 {
     [field: SerializeField] public HexGrid Grid { get; set; }
     [field: SerializeField] public GameObject PathPrefab { get; set; }
+    [field: SerializeField] public GameObject RangePrefab { get; set; }
 
     private HexCell SelectedCell { get; set; }
     private List<HexCell> ReachableCells { get; set; } = new();
-    private PathManager PathManager { get; set; } = new();
+    private List<HexCell> RangeCells { get; set; } = new();
+    private PathLineManager PathManager { get; set; } = new();
 
     void OnEnable()
     {
@@ -34,9 +37,38 @@ public class HexGridManager : MonoBehaviour
         ReachableCells = cells;
     }
 
+    private void SetRangeCells(List<HexCell> cells)
+    {
+        // RangeCells?.ForEach(x => x.OnBlur());
+        // cells?.ForEach(x => x.OnHighlighted());
+        PathManager.DestroyPath("Range");
+
+        RangeCells = cells;
+        var c = RangeCells.Select(x => x.GetLines()).SelectMany(x => x).ToList();
+
+        var uniqueLines = c.GroupBy(l => l, new LineEqualityComparer())
+                        .ToList();
+        var count = uniqueLines.Select(x => x.Count()).ToList();
+        var unique = uniqueLines.Where(x => x.Count() == 1).SelectMany(x => x).ToList();
+        var ul = Line.GetContiniousLines(unique);
+        var a = Line.GetContiniousNodes(ul);
+
+        foreach (var l in ul)
+        {
+            Debug.DrawLine(l.nodes[0], l.nodes[1], Color.magenta, 5f);
+        }
+
+        PathManager.SetPath("Range", a, RangePrefab);
+    }
+
     private void SetPath(List<HexCell> path)
     {
-        PathManager.SetPath(path, PathPrefab);
+        var points = path.Select(x =>
+        {
+            var c = x.GetCenter();
+            return new Node(c);
+        }).ToList();
+        PathManager.SetPath("Movement", points, PathPrefab, 0.5f, 10);
     }
 
     private void OnLeftMouseClick(RaycastHit hit)
@@ -44,18 +76,28 @@ public class HexGridManager : MonoBehaviour
         if (SelectedCell == null) return;
         var cell = GetCell(hit);
         if (cell.TerrainType.IsNotMoveable) return;
+
+        if (cell.Unit != null)
+        {
+            if (!RangeCells.Any(x => x.OffsetCoordinates == cell.OffsetCoordinates)) return;
+
+            SelectedCell.Unit.AttackTarget(cell.Unit);
+            return;
+        }
+
         if (!ReachableCells.Any(x => x.OffsetCoordinates == cell.OffsetCoordinates)) return;
 
         MoveUnit(SelectedCell, cell);
         SelectedCell?.OnBlur();
         SelectedCell = null;
         SetReachableCells(new());
+        SetRangeCells(new());
     }
 
     private void OnRightMouseClick(RaycastHit hit)
     {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
+        float localX = hit.point.x - 1;
+        float localZ = hit.point.z - 1;
         Vector2 localtion = HexHelpers.CoordinateToOffset(localX, localZ, Grid.HexSize, Grid.Orientation);
         var center = HexHelpers.GetCenter(Grid.HexSize, (int)localtion.x, (int)localtion.y, Grid.Orientation);
         SelectCell((int)localtion.x, (int)localtion.y);
@@ -63,8 +105,9 @@ public class HexGridManager : MonoBehaviour
 
     private void OnHover(RaycastHit hit)
     {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
+        float localX = hit.point.x - 1;
+        float localZ = hit.point.z - 1;
+        Debug.Log($"Hovering over {localX}, {localZ}");
         Vector2 localtion = HexHelpers.CoordinateToOffset(localX, localZ, Grid.HexSize, Grid.Orientation);
 
         var cell = ReachableCells.FirstOrDefault(x => x.OffsetCoordinates == localtion);
@@ -88,6 +131,7 @@ public class HexGridManager : MonoBehaviour
         {
             SelectedCell = null;
             SetReachableCells(new());
+            SetRangeCells(new());
             return;
         }
 
@@ -95,6 +139,7 @@ public class HexGridManager : MonoBehaviour
         {
             SelectedCell = null;
             SetReachableCells(new());
+            SetRangeCells(new());
             return;
         }
 
@@ -102,10 +147,12 @@ public class HexGridManager : MonoBehaviour
         {
             SelectedCell = null;
             SetReachableCells(new());
+            SetRangeCells(new());
             return;
         };
 
         SetReachableCells(FindReachableCoordinates(cell, cell.Unit?.Movement + 1 ?? 3, Grid.OffsetGrid.Cast<HexCell>().ToList()));
+        SetRangeCells(FindReachableCoordinates(cell, cell.Unit?.Range + 1 ?? 3, Grid.OffsetGrid.Cast<HexCell>().ToList()));
 
         SelectedCell = cell;
         SelectedCell.OnSelected();
@@ -137,17 +184,17 @@ public class HexGridManager : MonoBehaviour
     {
         if (to.TerrainType.IsNotMoveable) return;
 
-        if (from.Unit == null || to.Unit != null) return;
+        if (from.Unit == null) return;
 
-        StartCoroutine(from.Unit.Move(PathManager.GetPoints()));
+        StartCoroutine(from.Unit.Move(PathManager.GetPoints("Movement")));
         to.SetUnit(from.Unit);
         from.SetUnit((HexUnit)default);
     }
 
     public HexCell GetCell(RaycastHit hit)
     {
-        float localX = hit.point.x - transform.position.x;
-        float localZ = hit.point.z - transform.position.z;
+        float localX = hit.point.x - 1;
+        float localZ = hit.point.z - 1;
         Vector2 localtion = HexHelpers.CoordinateToOffset(localX, localZ, Grid.HexSize, Grid.Orientation);
         var center = HexHelpers.GetCenter(Grid.HexSize, (int)localtion.x, (int)localtion.y, Grid.Orientation) + transform.position;
         Debug.Log($"Center: {center.x}, {center.y}");
@@ -160,6 +207,12 @@ public class HexGridManager : MonoBehaviour
     {
         var blocked = range.Where(x => x.TerrainType.IsNotMoveable).ToList();
         return BreadthFirstSearch(center, steps, blocked);
+    }
+
+    public List<HexCell> FindRangeCoordinates(HexCell center, int steps, List<HexCell> range)
+    {
+        var blocked = range.Where(x => !x.TerrainType.IsBulletProof).ToList();
+        return BreadthFirstSearch(center, steps, new List<HexCell>());
     }
 
     public List<HexCell> BreadthFirstSearch(HexCell origin, int steps, List<HexCell> blocked)

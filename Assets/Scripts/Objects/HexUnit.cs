@@ -8,6 +8,7 @@ public class HexUnit
     private Transform UnitObject { get; set; }
     private Transform CanvasObject { get; set; }
     private Vector3 InitialRotation { get; set; }
+    private HealthBar HealthBar { get; set; }
 
     public int Health { get; set; }
     public int Attack { get; set; }
@@ -38,11 +39,15 @@ public class HexUnit
             unitObject.transform
         );
 
+        var hb = canvasObject.GetComponentInChildren<HealthBar>();
+        hb.SetMaxHealth(type.Health);
+
         return new HexUnit
         {
             UnitType = type,
             UnitObject = unitObject,
             CanvasObject = canvasObject,
+            HealthBar = hb,
             InitialRotation = initialRotation,
             Health = type.Health,
             Attack = type.Attack,
@@ -86,5 +91,28 @@ public class HexUnit
         // Calculate the rotation needed to point towards the target
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    public void AttackTarget(HexUnit target)
+    {
+        Animator animator = UnitObject.GetComponent<Animator>();
+        animator.SetTrigger("Attack");
+        target.TakeDamage(Attack);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        HealthBar.SetHealth(Health);
+        if (Health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Object.Destroy(UnitObject.gameObject);
+        Object.Destroy(CanvasObject.gameObject);
     }
 }

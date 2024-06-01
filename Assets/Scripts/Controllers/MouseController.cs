@@ -24,8 +24,10 @@ public class MouseController : Singleton<MouseController>
         }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
         if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
         {
+            Debug.DrawLine(hit.point, hit.point + Vector3.up * 10, Color.green);
             OnHover?.Invoke(hit);
         }
     }

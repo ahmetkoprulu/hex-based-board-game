@@ -84,6 +84,31 @@ public class HexCell
         ) + Grid.transform.position;
     }
 
+    public Vector3[] GetVertices(Vector3[] corners = null)
+    {
+        corners ??= HexHelpers.GetCorners(Grid.HexSize, Grid.Orientation);
+        var center = GetCenter();
+        return corners.Select(corner => center + corner).ToArray();
+    }
+
+    public IEnumerable<Line> GetLines()
+    {
+        var center = GetCenter();
+        var corners = HexHelpers.GetCorners(Grid.HexSize, Grid.Orientation);
+        return Enumerable
+            .Range(0, corners.Length)
+            .Select(x =>
+            {
+                var start = new Node((center + corners[x]).Round());
+                var end = new Node((center + corners[(x + 1) % 6]).Round());
+
+                var max = Node.Max(start, end);
+                var min = Node.Min(start, end);
+
+                return new Line(max, min);
+            });
+    }
+
     public void CreateTerrain()
     {
         Vector3 centrePosition = HexHelpers.GetCenter(
