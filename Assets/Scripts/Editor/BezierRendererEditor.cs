@@ -31,7 +31,7 @@ public class BezierRendererEditor : Editor
         if (GUILayout.Button("Set Points"))
         {
             Smoother.LineRenderer.positionCount = Smoother.Points.Count;
-            Smoother.LineRenderer.SetPositions(Smoother.Points.ToArray());
+            Smoother.LineRenderer.SetPositions(Smoother.Points.Select(x => (Vector3)x).ToArray());
         }
 
         if (GUILayout.Button("Smooth"))
@@ -42,7 +42,7 @@ public class BezierRendererEditor : Editor
         if (GUILayout.Button("Restore Default"))
         {
             Smoother.LineRenderer.positionCount = Smoother.Points.Count;
-            Smoother.LineRenderer.SetPositions(Smoother.Points.ToArray());
+            Smoother.LineRenderer.SetPositions(Smoother.Points.Select(x => (Vector3)x).ToArray());
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -58,7 +58,7 @@ public class BezierRendererEditor : Editor
 
     private void DrawSegments(List<BezierCurve> curves)
     {
-        SmoothedPoints = Smoother.GenerateSmoothedPoints();
+        SmoothedPoints = Smoother.GenerateSmoothedPoints().Select(x => (Vector3)x).ToList();
         for (var i = 0; i < SmoothedPoints.Count - 1; i++)
         {
             Handles.color = Color.white;

@@ -18,7 +18,7 @@ MonoBehaviour:
   <Health>k__BackingField: 2
   <Attack>k__BackingField: 2
   <Defence>k__BackingField: 1
-  <Movement>k__BackingField: 2
+  <Movement>k__BackingField: 1
   <Range>k__BackingField: 3
   <Canvas>k__BackingField: {fileID: 7305543880505244235, guid: e15c8b7a45d49f948be827684364e96e, type: 3}
   <Prefab>k__BackingField: {fileID: 8584991783828831449, guid: 4d4319dde2f198845ac34608a1013ffc, type: 3}

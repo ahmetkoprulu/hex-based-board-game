@@ -7,6 +7,11 @@ public class HealthBar : MonoBehaviour
 {
     [field: SerializeField] public Slider Slider { get; set; }
 
+    private void Awake()
+    {
+        Slider = GetComponent<Slider>();
+    }
+
     public void SetMaxHealth(int health)
     {
         Slider.maxValue = health;

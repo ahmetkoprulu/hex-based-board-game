@@ -19,3 +19,4 @@ MonoBehaviour:
   <Prefab>k__BackingField: {fileID: 7360584943320439267, guid: c61fe1f4950cc47438dcfeb259bb7484, type: 3}
   <Icon>k__BackingField: {fileID: 0}
   <IsNotMoveable>k__BackingField: 1
+  <IsBulletProof>k__BackingField: 1

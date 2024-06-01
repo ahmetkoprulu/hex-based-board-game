@@ -12,4 +12,5 @@ public class TerrainType : ScriptableObject
     [field: SerializeField] public Transform Prefab { get; set; }
     [field: SerializeField] public Sprite Icon { get; set; }
     [field: SerializeField] public bool IsNotMoveable { get; set; }
+    [field: SerializeField] public bool IsBulletProof { get; set; }
 }
