@@ -84,23 +84,22 @@ public class HexCell
         ) + Grid.transform.position;
     }
 
-    public Vector3[] GetVertices(Vector3[] corners = null)
+    public Vector3[] GetVertices()
     {
-        corners ??= HexHelpers.GetCorners(Grid.HexSize, Grid.Orientation);
         var center = GetCenter();
-        return corners.Select(corner => center + corner).ToArray();
+        return HexHelpers.GetCornerCoordinates(Grid.HexSize, center, Grid.Orientation);
     }
 
     public IEnumerable<Line> GetLines()
     {
         var center = GetCenter();
-        var corners = HexHelpers.GetCorners(Grid.HexSize, Grid.Orientation);
+        var corners = HexHelpers.GetCornerCoordinates(Grid.HexSize, center, Grid.Orientation);
         return Enumerable
             .Range(0, corners.Length)
             .Select(x =>
             {
-                var start = new Node((center + corners[x]).Round());
-                var end = new Node((center + corners[(x + 1) % 6]).Round());
+                var start = new Node(corners[x]);
+                var end = new Node(corners[(x + 1) % 6]);
 
                 var max = Node.Max(start, end);
                 var min = Node.Min(start, end);

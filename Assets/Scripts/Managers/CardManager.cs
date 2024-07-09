@@ -58,7 +58,6 @@ namespace UnityRoyale
 
         private void CardDragBegun(int cardId)
         {
-            Debug.Log("CardDragBegun");
             var card = Cards[cardId];
             ParentAfterDrag = card.transform.parent;
             card.transform.SetParent(card.transform.parent.parent);
@@ -80,7 +79,6 @@ namespace UnityRoyale
 
             if (hit.collider?.CompareTag("Grid") ?? false)
             {
-                Debug.Log("Card dragged on grid");
                 var cell = hexGridManager.GetCell(hit);
 
                 if (!cardIsActive)
@@ -102,7 +100,6 @@ namespace UnityRoyale
                 }
                 else
                 {
-                    Debug.Log("Card dragged on grid");
                     //temporary copy has been created, we move it along with the cursor
                     previewHolder.transform.position = cell.GetCenter();
                 }
@@ -125,7 +122,6 @@ namespace UnityRoyale
 
         private void CardDragEnd(int cardId)
         {
-            Debug.Log("CardDragEnd");
             //raycasting to check if the card is on the play field
 
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -133,7 +129,6 @@ namespace UnityRoyale
 
             if (hit.collider?.CompareTag("Grid") ?? false)
             {
-                Debug.Log("Card dropped on grid");
                 OnCardUsed?.Invoke(Cards[cardId].cardData, hit.point + inputCreationOffset, Faction.Player); //GameManager picks this up to spawn the actual Placeable //GameManager picks this up to spawn the actual Placeable
 
                 ClearPreviewObjects();
@@ -152,7 +147,6 @@ namespace UnityRoyale
             }
             else
             {
-                Debug.Log("Card dropped outside grid");
                 var card = Cards[cardId];
                 card.transform.SetParent(ParentAfterDrag);
                 card.transform.SetSiblingIndex(card.cardId);

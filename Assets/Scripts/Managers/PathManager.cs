@@ -53,8 +53,8 @@ public class PathLine
         if (PathObject == null) return;
 
         Object.Destroy(PathObject);
-        PathObject = null;
-        Renderer = null;
+        // PathObject = null;
+        // Renderer = null;
     }
 }
 

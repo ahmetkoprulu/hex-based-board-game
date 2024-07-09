@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO.Compression;
@@ -15,6 +16,13 @@ public static class HexHelpers
 
     public static float InnerRadius(float size) => size * 0.866025404f; // sqrt(3) * size. Height of the flat hexagon
 
+    public static Vector3[] GetCornerCoordinates(float size, Vector3 center, HexOrientation orientation)
+    {
+        var corners = GetCorners(size, orientation);
+        var coordinates = corners.Select(corner => (center + corner).Round(4)).ToArray();
+        return coordinates;
+    }
+
     public static Vector3[] GetCorners(float size, HexOrientation orientation)
     {
         var corners = new Vector3[6];
@@ -26,7 +34,9 @@ public static class HexHelpers
     {
         var angle = 60f * i;
         if (orientation == HexOrientation.PointyTop) angle += 30f;
-        return new Vector3(size * Mathf.Cos(angle * Mathf.Deg2Rad), 0f, size * Mathf.Sin(angle * Mathf.Deg2Rad));
+        var x = size * Mathf.Cos(angle * Mathf.Deg2Rad);
+        var z = size * Mathf.Sin(angle * Mathf.Deg2Rad);
+        return new Vector3((float)x, 0f, (float)z);
     }
 
     public static Vector3 GetCenter(float size, int x, int z, HexOrientation orientation)
@@ -34,7 +44,7 @@ public static class HexHelpers
         var center = Vector3.zero;
         center.x = orientation == HexOrientation.PointyTop ? (x + z * 0.5f - z / 2) * InnerRadius(size) * 2f : x * OuterRadius(size) * 1.5f;
         center.z = orientation == HexOrientation.PointyTop ? z * OuterRadius(size) * 1.5f : (z + x * 0.5f - x / 2) * InnerRadius(size) * 2f;
-        return center;
+        return center.Round(3);
     }
 
     public static Vector2 CubeToAxial(Vector3 cube) => new Vector2((int)cube.x, (int)cube.y);
@@ -106,16 +116,15 @@ public static class HexHelpers
 
     public static Vector2 CoordinateToOffset(float x, float z, float hexSize, HexOrientation orientation) => CubeToOffset(AxialToCube(CoordinateToAxial(x, z, hexSize, orientation)), orientation);
 
-    // Returns list of axial coordinates within a range of n from the start coordinate
     public static List<Vector3> GetCoordinateRange(Vector3 center, int n)
     {
         var results = new List<Vector3>();
-        for (int q = -n; q <= n; q++)
+        for (var q = -n; q <= n; q++)
         {
             int r1 = Mathf.Max(-n, -q - n);
             int r2 = Mathf.Min(n, -q + n);
 
-            for (int r = r1; r <= r2; r++) results.Add(center + new Vector3(q, r, -q - r));
+            for (var r = r1; r <= r2; r++) results.Add(center + new Vector3(q, r, -q - r));
         }
 
         return results;

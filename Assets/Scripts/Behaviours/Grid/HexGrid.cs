@@ -50,16 +50,16 @@ public class HexGrid : MonoBehaviour
             for (var x = 0; x < Width; x++)
             {
                 var center = HexHelpers.GetCenter(HexSize, x, z, Orientation) + transform.position;
-                var corners = HexHelpers.GetCorners(HexSize, Orientation);
+                var corners = HexHelpers.GetCornerCoordinates(HexSize, center, Orientation);
                 vertices.AddRange(corners.Select(corner => center + corner).ToArray());
 
                 for (var c = 0; c < corners.Length; c++)
                 {
-                    var startPoint = (center + corners[c]).Round();
+                    var startPoint = corners[c];
                     // Handles.Label(startPoint + Vector3.forward * 0.0f, $"[{startPoint.x}, {startPoint.z}]");
                     // s.HandleDotHandleCap(GUIUtility.GetControlID(FocusType.Passive), startPoint, Quaternion.identity, 0.05f, EventType.Repaint);
                     var next = (c + 1) % 6;
-                    var endPoint = (center + corners[next]).Round();
+                    var endPoint = corners[next];
                     Gizmos.DrawLine(startPoint, endPoint);
                 }
             }
@@ -80,6 +80,38 @@ public static class VectorExtensions
             Mathf.Round(vector3.x * multiplier) / multiplier,
             Mathf.Round(vector3.y * multiplier) / multiplier,
             Mathf.Round(vector3.z * multiplier) / multiplier);
+    }
+
+    public static Vector3 Ceil(this Vector3 vector3, int decimalPlaces = 2)
+    {
+        float multiplier = 1;
+        for (int i = 0; i < decimalPlaces; i++)
+        {
+            multiplier *= 10f;
+        }
+        return new Vector3(
+            Mathf.Ceil(vector3.x * multiplier) / multiplier,
+            Mathf.Ceil(vector3.y * multiplier) / multiplier,
+            Mathf.Ceil(vector3.z * multiplier) / multiplier);
+    }
+
+    public static Vector3 Floor(this Vector3 vector3, int decimalPlaces = 2)
+    {
+        float multiplier = 1;
+        for (int i = 0; i < decimalPlaces; i++)
+        {
+            multiplier *= 10f;
+        }
+        return new Vector3(
+            Mathf.Floor(vector3.x * multiplier) / multiplier,
+            Mathf.Floor(vector3.y * multiplier) / multiplier,
+            Mathf.Floor(vector3.z * multiplier) / multiplier);
+    }
+
+    public static float TruncateFloat(this float value, int decimalPlaces)
+    {
+        var multiplier = Mathf.Pow(10, decimalPlaces);
+        return Mathf.Floor(value * multiplier) / multiplier;
     }
 }
 

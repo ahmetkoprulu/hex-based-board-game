@@ -115,7 +115,7 @@ public class Line
 
             if (!foundNext)
             {
-                Debug.WriteLine("Cannot find the next line to continue the perimeter.");
+                // Debug.WriteLine("Cannot find the next line to continue the perimeter.");
                 break;
             }
         }
@@ -152,7 +152,7 @@ public class LineEqualityComparer : IEqualityComparer<Line>
     public bool Equals(Line x, Line y)
     {
         var a = (x.nodes[0] == y.nodes[0] && x.nodes[1] == y.nodes[1]) || (x.nodes[0] == y.nodes[1] && x.nodes[1] == y.nodes[0]);
-        Debug.WriteLine($"Comparing {x.nodes[0].Point} == {y.nodes[0].Point} and {x.nodes[1].Point} == {y.nodes[1].Point} = {a}");
+        // Debug.WriteLine($"Comparing {x.nodes[0].Point} == {y.nodes[0].Point} and {x.nodes[1].Point} == {y.nodes[1].Point} = {a}");
         return a;
     }
 

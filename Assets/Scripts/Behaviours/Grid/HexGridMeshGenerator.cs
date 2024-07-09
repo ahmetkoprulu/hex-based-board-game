@@ -75,7 +75,6 @@ public class HexGridMeshGenerator : MonoBehaviour
         GetComponent<MeshCollider>().sharedMesh = mesh;
 
         var gridLayerIndex = GetGridLayer(layerMask);
-        Debug.Log($"Layer Index: {gridLayerIndex}");
         gameObject.layer = gridLayerIndex;
     }
 
@@ -90,7 +89,6 @@ public class HexGridMeshGenerator : MonoBehaviour
     private int GetGridLayer(LayerMask layerMask)
     {
         var layerMaskValue = layerMask.value;
-        Debug.Log($"Layer Mask Value: {layerMaskValue}");
 
         for (var i = 0; i < 32; i++)
         {
