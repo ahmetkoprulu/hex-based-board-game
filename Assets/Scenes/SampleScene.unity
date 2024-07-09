@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4455887, g: 0.7189518, b: 0.73046714, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -351,7 +351,7 @@ Transform:
   m_GameObject: {fileID: 708475605}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -374,7 +374,7 @@ MonoBehaviour:
   - TerrainType: {fileID: 11400000, guid: 2c1096b81a72d7b4b993866a6fd4b959, type: 2}
     Rarity: 50
   - TerrainType: {fileID: 11400000, guid: b32bb61a7df79c648a995e08311d070a, type: 2}
-    Rarity: 25
+    Rarity: 10
   - TerrainType: {fileID: 11400000, guid: 838e769c87e8c4b40be49e6be5353935, type: 2}
     Rarity: 3
 --- !u!114 &708475613
@@ -411,8 +411,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 16.33151, y: 1, z: 21.990734}
-  m_Center: {x: 7.4050283, y: 0, z: 10.495365}
+  m_Size: {x: 18.536324, y: 0, z: 15.587552}
+  m_Center: {x: 8.325951, y: 0.1, z: 6.6897883}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +500,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.52233994, y: -0, z: -0, w: 0.85273737}
-  m_LocalPosition: {x: 7.46, y: 10.83, z: -1.98}
+  m_LocalPosition: {x: 7.46, y: 10.83, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

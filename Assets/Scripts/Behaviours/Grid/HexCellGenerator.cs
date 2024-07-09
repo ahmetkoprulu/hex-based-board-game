@@ -11,6 +11,11 @@ public class HexCellGenerator : MonoBehaviour
 
     private List<HexCell> cells = new();
 
+    private void Start()
+    {
+        Generate();
+    }
+
     private void Awake()
     {
         if (Grid == null) Grid = GetComponent<HexGrid>();
