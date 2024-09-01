@@ -14,10 +14,29 @@ public class CameraManager : MonoBehaviour
     private Vector3 CameraOrigin;
     private bool IsDragging = false;
 
-    public bool IsStraightZoomEnabled = false;
+    public CameraMovementType MovementType { get; set; } = CameraMovementType.Crescent;
     public float ZoomSpeed = 40f;
     public float ZoomMin = 5f;
     public float ZoomMax = 100f;
+
+    private Vector3 initialOffset;
+    private Quaternion initialRotation;
+    private Quaternion targetRotation;
+    private float zoomProgress = 0f;
+
+    void Start()
+    {
+        VirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        if (VirtualCamera != null)
+        {
+            var transposer = VirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+            initialOffset = transposer.m_FollowOffset;
+            initialRotation = VirtualCamera.transform.rotation;
+
+            // Target rotation rotating around the X-axis
+            targetRotation = Quaternion.Euler(90f, initialRotation.eulerAngles.y, initialRotation.eulerAngles.z);
+        }
+    }
 
     void Update()
     {
@@ -87,7 +106,8 @@ public class CameraManager : MonoBehaviour
     // Zooming
     private void HandleZoom()
     {
-        if (IsStraightZoomEnabled) TryStraightZoom();
+        if (MovementType == CameraMovementType.Straight) TryStraightZoom();
+        else if (MovementType == CameraMovementType.Crescent) TryZoomTowardsTop();
         else HandleZoomY();
     }
 
@@ -117,4 +137,31 @@ public class CameraManager : MonoBehaviour
 
         transposer.m_FollowOffset = Vector3.Lerp(transposer.m_FollowOffset, offset, ZoomSpeed * Time.deltaTime);
     }
+
+    private void TryZoomTowardsTop()
+    {
+        if (VirtualCamera == null) return;
+
+        var transposer = VirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            // Calculate zoom progress based on mouse scroll
+            zoomProgress += -1 * Input.mouseScrollDelta.y * ZoomSpeed * Time.deltaTime;
+            zoomProgress = Mathf.Clamp01(zoomProgress); // Keep progress between 0 and 1
+
+            // Interpolate between initial offset and a point directly above the target
+            Vector3 targetOffset = new Vector3(0, initialOffset.magnitude, 0);
+            transposer.m_FollowOffset = Vector3.Lerp(initialOffset, targetOffset, zoomProgress);
+
+            // Interpolate the rotation around the X-axis
+            VirtualCamera.transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, zoomProgress);
+        }
+    }
+}
+
+public enum CameraMovementType : short
+{
+    Straight = 0,
+    SmoothedStraight = 1,
+    Crescent = 2
 }
